@@ -4,22 +4,17 @@ const CONFETTI = [
   "#ff6b9d", "#ffd93d", "#6bcb77", "#4d96ff", "#ff8fab", "#c77dff",
 ];
 
-const Tag = "div" as keyof JSX.IntrinsicElements;
-
 export function FloatingDecor() {
-  const Wrapper = Tag;
-  const Box = Tag;
-
   return (
-    <Wrapper className="floating-decor" aria-hidden="true">
-      <Box className="balloon balloon--1">{"\u{1F388}"}</Box>
-      <Box className="balloon balloon--2">{"\u{1F388}"}</Box>
-      <Box className="balloon balloon--3">{"\u{1F382}"}</Box>
-      <Box className="balloon balloon--4">{"\u{1F380}"}</Box>
-      <Box className="balloon balloon--5">{"\u{2728}"}</Box>
-      <Box className="streamer streamer--1" />
-      <Box className="streamer streamer--2" />
-      <Box className="streamer streamer--3" />
+    <div className="floating-decor" aria-hidden="true">
+      <div className="balloon balloon--1">{"\u{1F388}"}</div>
+      <div className="balloon balloon--2">{"\u{1F388}"}</div>
+      <div className="balloon balloon--3">{"\u{1F382}"}</div>
+      <div className="balloon balloon--4">{"\u{1F380}"}</div>
+      <div className="balloon balloon--5">{"\u{2728}"}</div>
+      <div className="streamer streamer--1" />
+      <div className="streamer streamer--2" />
+      <div className="streamer streamer--3" />
 
       {Array.from({ length: 40 }).map((_, i) => (
         <span
@@ -35,6 +30,6 @@ export function FloatingDecor() {
           }}
         />
       ))}
-    </Wrapper>
+    </div>
   );
 }
