@@ -103,7 +103,7 @@ export const BHARATIYA_RAIL_TICKET = {
   train: "राजधानी एक्सप्रेस",
   trainNo: "१२९५१",
   pnr: "२८४७ ५१९२०३",
-  from: "मुंबई",
+  from: "गुरुग्राम",
   to: "ऋषिकेश",
   travelClass: "एसी २ टियर",
   seat: "खिड़की · सीट B4 ४२",

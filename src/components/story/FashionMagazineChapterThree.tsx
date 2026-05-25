@@ -78,7 +78,7 @@ const CLIPS: ClipCard[] = [
     rotate: "1.5deg",
     headline: "WANDERLUST DISPATCH",
     sub: "The Travel Edit · Weekend Edition · Vol. 05",
-    body: "LOCAL STYLE ICON SPOTTED CHASING SUNSETS — café corners, unfamiliar streets, and carry-on outfits that never miss. Continued on page 7: मुंबई → ऋषिकेश, window seat confirmed.",
+    body: "LOCAL STYLE ICON SPOTTED CHASING SUNSETS — café corners, unfamiliar streets, and carry-on outfits that never miss. Continued on page 7: गुरुग्राम → ऋषिकेश, window seat confirmed.",
   },
   {
     type: "checklist",

@@ -43,7 +43,7 @@ export const MAGAZINE_BOOK_PAGES: MagazineBookPageDef[] = [
     bullets: [
       "Mirror selfie mood",
       "Portrait study",
-      "मुंबई → ऋषिकेश",
+      "गुरुग्राम → ऋषिकेश",
       "Weekend uniform",
       "Editor's letter",
     ],
@@ -139,7 +139,7 @@ export const MAG_BOOK_PAGE_COUNT = MAGAZINE_BOOK_PAGES.length;
 export const MAG_TOC_ENTRIES = [
   { page: 3, label: "Mirror selfie mood" },
   { page: 5, label: "Portrait study" },
-  { page: 7, label: "मुंबई → ऋषिकेश" },
+  { page: 7, label: "गुरुग्राम → ऋषिकेश" },
   { page: 8, label: "Weekend uniform" },
   { page: 9, label: "Editor's letter" },
 ] as const;
