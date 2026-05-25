@@ -5,15 +5,12 @@ import { FloatingDecor } from "@/components/FloatingDecor";
 import type { StoryChapter } from "@/lib/story-chapters";
 import { STORY_CHAPTERS } from "@/lib/story-chapters";
 
-const Box = "div" as keyof JSX.IntrinsicElements;
-
 type StoryChapterViewProps = {
   chapter: StoryChapter;
   chapterIndex: number;
 };
 
 export function StoryChapterView({ chapter, chapterIndex }: StoryChapterViewProps) {
-  const Wrapper = Box;
   const prev = chapterIndex > 0 ? STORY_CHAPTERS[chapterIndex - 1] : null;
   const next =
     chapterIndex < STORY_CHAPTERS.length - 1
@@ -21,10 +18,10 @@ export function StoryChapterView({ chapter, chapterIndex }: StoryChapterViewProp
       : null;
 
   return (
-    <Wrapper className="story-page">
+    <div className="story-page">
       <FloatingDecor />
 
-      <Wrapper className="story-progress" aria-label="Story progress">
+      <div className="story-progress" aria-label="Story progress">
         {STORY_CHAPTERS.map((c, i) => (
           <Link
             key={c.id}
@@ -34,7 +31,7 @@ export function StoryChapterView({ chapter, chapterIndex }: StoryChapterViewProp
             aria-current={i === chapterIndex ? "step" : undefined}
           />
         ))}
-      </Wrapper>
+      </div>
 
       <article className={`story-chapter story-chapter--${chapter.variant}`}>
         <span className="story-chapter__tape" aria-hidden="true" />
@@ -46,13 +43,13 @@ export function StoryChapterView({ chapter, chapterIndex }: StoryChapterViewProp
         ) : null}
 
         {chapter.variant === "finale" && chapter.cutoutWords ? (
-          <Wrapper className="story-chapter__cutouts" aria-hidden="true">
+          <div className="story-chapter__cutouts" aria-hidden="true">
             {chapter.cutoutWords.map((word) => (
               <span key={word} className="story-chapter__cutout-word">
                 {word}
               </span>
             ))}
-          </Wrapper>
+          </div>
         ) : null}
 
         <h1 className="story-chapter__title">
@@ -67,13 +64,13 @@ export function StoryChapterView({ chapter, chapterIndex }: StoryChapterViewProp
         <p className="story-chapter__body">{chapter.body}</p>
 
         {chapter.variant === "gate" && chapter.extras ? (
-          <Wrapper className="story-chapter__stamps" aria-hidden="true">
+          <div className="story-chapter__stamps" aria-hidden="true">
             {chapter.extras.map((icon, i) => (
               <span key={i} className="story-chapter__stamp">
                 {icon}
               </span>
             ))}
-          </Wrapper>
+          </div>
         ) : null}
 
         {chapter.extras && chapter.variant !== "gate" ? (
@@ -85,13 +82,13 @@ export function StoryChapterView({ chapter, chapterIndex }: StoryChapterViewProp
         ) : null}
 
         {chapter.variant === "finale" ? (
-          <Wrapper className="story-chapter__finale-burst" aria-hidden="true">
+          <div className="story-chapter__finale-burst" aria-hidden="true">
             <span>{"\u{1F382}"}</span>
             <span>{"\u{1F388}"}</span>
             <span>{"\u{1F38A}"}</span>
             <span>{"\u{2728}"}</span>
             <span>{"\u{1F973}"}</span>
-          </Wrapper>
+          </div>
         ) : null}
       </article>
 
@@ -120,6 +117,6 @@ export function StoryChapterView({ chapter, chapterIndex }: StoryChapterViewProp
       <p className="story-chapter__counter">
         {chapterIndex + 1} / {STORY_CHAPTERS.length}
       </p>
-    </Wrapper>
+    </div>
   );
 }
