@@ -1,0 +1,1614 @@
+/* Chapter 5 — cinematic birthday finale */
+
+.ck {
+  --ck-ink: #120a0d;
+  --ck-cream: #faf3eb;
+  --ck-gold: #d4af37;
+  --ck-gold-light: #f5e6b8;
+  --ck-rose: #e8a0b0;
+  --ck-blush: #f4c8d4;
+  --ck-frost: #fff5f8;
+  --ck-chocolate: #5c3a32;
+  --ck-cut: 50%;
+  --ck-cut-progress: 0;
+
+  position: relative;
+  min-height: 100svh;
+  overflow-x: hidden;
+  color: var(--ck-cream);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  background: var(--ck-ink);
+}
+
+/* —— Atmosphere —— */
+.ck-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ck-ambient__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.ck-ambient__glow--warm {
+  width: 75vmax;
+  height: 60vmax;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.32), transparent 68%);
+  animation: ck-glow-pulse 14s ease-in-out infinite;
+}
+
+.ck-ambient__glow--rose {
+  width: 55vmax;
+  height: 55vmax;
+  bottom: 0;
+  left: -15%;
+  background: radial-gradient(circle, rgba(200, 120, 140, 0.22), transparent 70%);
+}
+
+.ck-ambient__glow--gold {
+  width: 45vmax;
+  height: 45vmax;
+  top: 50%;
+  right: -12%;
+  background: radial-gradient(circle, rgba(240, 215, 140, 0.18), transparent 70%);
+}
+
+@keyframes ck-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+.ck-ambient__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.ck-ambient__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 48%,
+    transparent 20%,
+    rgba(8, 4, 6, 0.82) 100%
+  );
+}
+
+/* —— Sparkles —— */
+.ck-sparkles-field {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ck-sparkles-field__dot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--ck-gold-light);
+  box-shadow: 0 0 8px rgba(245, 230, 184, 0.8);
+  animation: ck-twinkle 3s ease-in-out infinite;
+}
+
+@keyframes ck-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* —— Petals —— */
+.ck-petals {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ck-petals__bit {
+  position: absolute;
+  top: -5%;
+  width: 0.5rem;
+  height: 0.7rem;
+  border-radius: 100% 0 100% 0;
+  background: rgba(232, 160, 176, 0.55);
+  animation: ck-petal-fall linear infinite;
+}
+
+@keyframes ck-petal-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* —— Balloons —— */
+.ck-balloons {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ck-balloon {
+  position: absolute;
+  bottom: -18%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+  animation: ck-balloon-fly var(--ck-balloon-duration, 24s) linear infinite;
+  animation-delay: var(--ck-balloon-delay, 0s);
+}
+
+.ck-balloon--back {
+  opacity: 0.45;
+  filter: blur(1px);
+  z-index: 0;
+}
+
+.ck-balloon__orb {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: var(--ck-balloon-size);
+  height: calc(var(--ck-balloon-size) * 1.2);
+  border-radius: 50% 50% 46% 46%;
+  box-shadow:
+    inset -6px -10px 18px rgba(0, 0, 0, 0.15),
+    inset 5px 6px 14px rgba(255, 255, 255, 0.35),
+    0 10px 24px rgba(0, 0, 0, 0.2);
+  animation: ck-balloon-sway 4s ease-in-out infinite;
+  animation-delay: var(--ck-balloon-delay, 0s);
+}
+
+.ck-balloon--blush .ck-balloon__orb {
+  background: radial-gradient(circle at 35% 28%, #ffe0ea, #e8a0b0 60%, #b86a7a);
+}
+.ck-balloon--rose .ck-balloon__orb {
+  background: radial-gradient(circle at 35% 28%, #ffc8d8, #d47888 55%, #9e4560);
+}
+.ck-balloon--gold .ck-balloon__orb {
+  background: radial-gradient(circle at 35% 28%, #fff4d0, #d4af37 58%, #8a7020);
+}
+.ck-balloon--cream .ck-balloon__orb {
+  background: radial-gradient(circle at 35% 28%, #fffef9, #ebe3d8 55%, #c8b8a8);
+}
+
+.ck-balloon__shine {
+  position: absolute;
+  top: 18%;
+  left: 28%;
+  width: 22%;
+  height: 14%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+}
+
+.ck-balloon__string {
+  flex-shrink: 0;
+  width: 1px;
+  height: 4rem;
+  margin-top: -1px;
+  background: linear-gradient(
+    180deg,
+    rgba(250, 243, 235, 0.55) 0%,
+    rgba(250, 243, 235, 0.15) 85%,
+    transparent 100%
+  );
+}
+
+@keyframes ck-balloon-fly {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-3deg);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  25% {
+    transform: translate3d(calc(var(--ck-balloon-drift, 20px) * 0.35), -28vh, 0)
+      rotate(2deg);
+  }
+  50% {
+    transform: translate3d(calc(var(--ck-balloon-drift, 20px) * -0.25), -55vh, 0)
+      rotate(-2deg);
+  }
+  75% {
+    transform: translate3d(calc(var(--ck-balloon-drift, 20px) * 0.6), -82vh, 0)
+      rotate(3deg);
+  }
+  100% {
+    transform: translate3d(var(--ck-balloon-drift, 20px), -118vh, 0) rotate(-1deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes ck-balloon-sway {
+  0%,
+  100% {
+    transform: translateX(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateX(6px) rotate(4deg);
+  }
+}
+
+/* —— Fairy lights —— */
+.ck-lights {
+  position: fixed;
+  top: 4.5rem;
+  left: 0;
+  right: 0;
+  height: 2.5rem;
+  z-index: 4;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4%;
+}
+
+.ck-lights__wire {
+  position: absolute;
+  top: 0.35rem;
+  left: 2%;
+  right: 2%;
+  height: 2px;
+  background: rgba(250, 243, 235, 0.15);
+  border-radius: 2px;
+}
+
+.ck-lights__bulb {
+  position: relative;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: 0.5rem;
+  border-radius: 50%;
+  background: var(--ck-gold-light);
+  box-shadow: 0 0 10px rgba(245, 230, 184, 0.9);
+  animation: ck-bulb-glow 2s ease-in-out infinite;
+  animation-delay: calc(var(--ck-li, 0) * 0.15s);
+}
+
+@keyframes ck-bulb-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* —— Ribbons —— */
+.ck-ribbons {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ck-ribbons__drape {
+  position: absolute;
+  top: 0;
+  width: 4rem;
+  height: 45vh;
+  opacity: 0.35;
+  background: linear-gradient(
+    180deg,
+    rgba(212, 175, 55, 0.5),
+    rgba(232, 160, 176, 0.2) 60%,
+    transparent
+  );
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%);
+}
+
+.ck-ribbons__drape--l {
+  left: 0;
+  transform: skewX(-6deg);
+}
+.ck-ribbons__drape--r {
+  right: 0;
+  transform: skewX(6deg) scaleX(-1);
+}
+
+/* —— Floral accents —— */
+.ck-florals {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ck-florals__sprig {
+  position: absolute;
+  width: 3.5rem;
+  height: 3.5rem;
+  opacity: 0.22;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(232, 160, 176, 0.9) 0.2rem, transparent 0.25rem),
+    radial-gradient(circle at 70% 40%, rgba(212, 175, 55, 0.7) 0.15rem, transparent 0.2rem),
+    radial-gradient(circle at 50% 70%, rgba(255, 200, 210, 0.6) 0.18rem, transparent 0.22rem);
+}
+
+.ck-florals__sprig--tl {
+  top: 5rem;
+  left: 0.5rem;
+  transform: rotate(-25deg);
+}
+.ck-florals__sprig--tr {
+  top: 5rem;
+  right: 0.5rem;
+  transform: rotate(25deg) scaleX(-1);
+}
+.ck-florals__sprig--bl {
+  bottom: 4rem;
+  left: 0.5rem;
+  transform: rotate(15deg);
+}
+.ck-florals__sprig--br {
+  bottom: 4rem;
+  right: 0.5rem;
+  transform: rotate(-15deg) scaleX(-1);
+}
+
+/* —— Top banner —— */
+.ck-banner {
+  position: fixed;
+  top: 3.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.ck-banner__panel {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 1.4rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(212, 175, 55, 0.12)
+  );
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  backdrop-filter: blur(14px);
+  border-radius: 2px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.ck-banner__text {
+  font-family: var(--font-bodoni), var(--font-playfair), Georgia, serif;
+  font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ck-gold-light);
+}
+
+.ck-banner__star {
+  color: var(--ck-rose);
+  font-size: 0.65rem;
+  opacity: 0.9;
+}
+
+.ck-banner__ribbon {
+  position: absolute;
+  top: 100%;
+  width: 3px;
+  height: 2.5rem;
+  background: linear-gradient(180deg, var(--ck-gold), transparent);
+}
+
+.ck-banner__ribbon--l {
+  left: 20%;
+}
+.ck-banner__ribbon--r {
+  right: 20%;
+}
+
+/* —— Celebration overlay —— */
+.ck-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: ck-celeb-in 0.8s ease forwards;
+}
+
+@keyframes ck-celeb-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ck-celebration__wash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    rgba(40, 20, 28, 0.55),
+    rgba(8, 4, 6, 0.75)
+  );
+}
+
+.ck-celebration__firework {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  left: calc(8% + var(--ck-fw, 0) * 7.5%);
+  top: calc(12% + (var(--ck-fw, 0) % 5) * 14%);
+  background: #fff8e8;
+  box-shadow: 0 0 20px rgba(255, 200, 120, 0.9);
+  animation: ck-firework 2.2s ease-out infinite;
+  animation-delay: calc(var(--ck-fw, 0) * 0.28s);
+}
+
+.ck-celebration__firework::before,
+.ck-celebration__firework::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: ck-firework-ring 2.2s ease-out infinite;
+  animation-delay: calc(var(--ck-fw, 0) * 0.28s + 0.15s);
+}
+
+.ck-celebration__firework::before {
+  box-shadow:
+    0 -36px 0 2px rgba(255, 210, 140, 0.85),
+    32px -8px 0 1px rgba(255, 180, 100, 0.75),
+    -30px -10px 0 1px rgba(255, 160, 140, 0.75),
+    22px 26px 0 1px rgba(240, 215, 140, 0.65),
+    -24px 24px 0 1px rgba(232, 160, 176, 0.7),
+    0 38px 0 2px rgba(255, 230, 180, 0.8);
+}
+
+@keyframes ck-firework {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  12% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes ck-firework-ring {
+  0%,
+  20% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+}
+
+.ck-celebration__particles {
+  position: absolute;
+  inset: 0;
+}
+
+.ck-celebration__particle {
+  position: absolute;
+  bottom: 20%;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  animation: ck-float-up 4s ease-in infinite;
+}
+
+.ck-celebration__particle--0 {
+  background: var(--ck-gold-light);
+}
+.ck-celebration__particle--1 {
+  background: var(--ck-rose);
+}
+.ck-celebration__particle--2 {
+  background: #fff;
+}
+.ck-celebration__particle--3 {
+  background: #ffb347;
+}
+
+@keyframes ck-float-up {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-70vh) scale(1);
+    opacity: 0;
+  }
+}
+
+.ck-celebration__confetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ck-celebration__confetti-bit {
+  position: absolute;
+  top: -4%;
+  width: 0.4rem;
+  height: 0.65rem;
+  border-radius: 1px;
+  background: var(--ck-gold);
+  animation: ck-confetti-fall 3.5s linear infinite;
+  transform: rotate(var(--ck-cr, 0deg));
+}
+
+.ck-celebration__confetti-bit:nth-child(3n) {
+  background: var(--ck-rose);
+}
+.ck-celebration__confetti-bit:nth-child(3n + 1) {
+  background: #fff;
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 50%;
+}
+
+@keyframes ck-confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.7;
+  }
+}
+
+.ck-celebration__headline {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  text-align: center;
+  animation: ck-title-rise 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.25s backwards;
+}
+
+.ck-celebration__line {
+  display: block;
+  font-family: var(--font-bodoni), var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ck-cream);
+  text-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+}
+
+.ck-celebration__name {
+  display: block;
+  margin-top: 0.15em;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(3.5rem, 15vw, 7rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  background: linear-gradient(
+    120deg,
+    #fffef8 0%,
+    var(--ck-gold-light) 30%,
+    #ffd4e0 55%,
+    var(--ck-gold) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 32px rgba(212, 175, 55, 0.6));
+  animation:
+    ck-name-glow 2.5s ease-in-out infinite alternate,
+    ck-name-shimmer 4s linear infinite;
+}
+
+@keyframes ck-name-shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes ck-name-glow {
+  from {
+    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+  }
+  to {
+    filter: drop-shadow(0 0 42px rgba(232, 160, 176, 0.65));
+  }
+}
+
+@keyframes ck-title-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+}
+
+.ck-celebration__sub {
+  position: relative;
+  z-index: 2;
+  margin: 1rem 0 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(250, 243, 235, 0.55);
+  animation: ck-title-rise 1s ease 0.6s backwards;
+}
+
+/* —— Nav —— */
+.ck__chapters {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+}
+
+.ck__chapter-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+.ck__chapter-dot--on {
+  background: rgba(240, 215, 140, 0.7);
+}
+
+.ck__chapter-dot--current {
+  transform: scale(1.45);
+  background: var(--ck-gold-light);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.65);
+}
+
+/* —— Main —— */
+.ck__main {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100svh;
+  padding: 6.5rem 1.25rem 5rem;
+}
+
+.ck__hero {
+  text-align: center;
+  max-width: 32rem;
+  margin-bottom: 1.25rem;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.ck__hero--hidden {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+}
+
+.ck__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(240, 215, 140, 0.7);
+}
+
+.ck__eyebrow-line {
+  width: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ck-gold), transparent);
+}
+
+.ck__title {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-bodoni), var(--font-playfair), Georgia, serif;
+  font-size: clamp(2.4rem, 8vw, 4.2rem);
+  font-weight: 400;
+  line-height: 0.98;
+  color: var(--ck-cream);
+}
+
+.ck__title em {
+  display: block;
+  font-style: italic;
+  background: linear-gradient(135deg, var(--ck-gold-light), var(--ck-rose));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ck__hint {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba(250, 243, 235, 0.55);
+}
+
+.ck__hint-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .ck__hint-mouse {
+    display: none;
+  }
+
+  .ck__hint-touch {
+    display: inline;
+  }
+}
+
+/* —— Stage / table —— */
+.ck__stage {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  max-width: 26rem;
+  min-height: min(58vh, 28rem);
+  perspective: 1100px;
+  perspective-origin: 50% 60%;
+}
+
+.ck-table {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ck-table__surface {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 130%;
+  height: 38%;
+  transform: translateX(-50%) rotateX(72deg);
+  transform-origin: bottom center;
+  background: linear-gradient(
+    180deg,
+    rgba(60, 45, 40, 0.9) 0%,
+    rgba(35, 25, 22, 0.95) 100%
+  );
+  border-radius: 50%;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.ck-table__spotlight {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  width: 85%;
+  height: 55%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center bottom,
+    rgba(255, 248, 240, 0.28) 0%,
+    transparent 65%
+  );
+  animation: ck-spotlight 7s ease-in-out infinite alternate;
+}
+
+.ck-table__reflection {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  width: 70%;
+  height: 8%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.08),
+    transparent 70%
+  );
+}
+
+@keyframes ck-spotlight {
+  from {
+    opacity: 0.75;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* —— Cake zone —— */
+.ck-cake-zone {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  min-height: min(52vh, 22rem);
+  padding: 1rem 0.5rem 2.5rem;
+  cursor: crosshair;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ck--cut .ck-cake-zone {
+  cursor: default;
+}
+
+.ck-cake__assembly {
+  position: relative;
+  width: min(280px, 84vw);
+  margin: 0 auto 1rem;
+}
+
+.ck-cake__pedestal {
+  position: relative;
+  padding-bottom: 0.75rem;
+  transform: perspective(900px) rotateX(6deg);
+  transform-origin: center bottom;
+  transform-style: preserve-3d;
+}
+
+.ck-cake__plate {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 102%;
+  height: 1rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f2ebe3 0%, #c8bcb0 55%, #a89888 100%);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.45);
+  z-index: 1;
+}
+
+.ck-cake {
+  position: relative;
+  height: 228px;
+  margin-bottom: 0.35rem;
+  filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.5));
+  z-index: 2;
+}
+
+/* Candles anchored to top surface of tier 3 */
+.ck-cake__candles-bridge {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) translateY(-96%);
+  width: 80%;
+  z-index: 14;
+  pointer-events: none;
+}
+
+.ck-cake__candles {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  width: 100%;
+  padding: 0 4%;
+}
+
+.ck-cake__candle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Top → bottom: flame, wick, body (body sits on cake) */
+.ck-cake__flame {
+  display: block;
+  width: 0.5rem;
+  height: 0.7rem;
+  flex-shrink: 0;
+  border-radius: 50% 50% 50% 50% / 60% 60% 35% 35%;
+  background: radial-gradient(circle at 50% 90%, #ff9a4d, #ff5c1a);
+  box-shadow:
+    0 0 14px rgba(255, 140, 60, 0.85),
+    0 0 28px rgba(255, 100, 40, 0.35);
+  animation: ck-flame 1s ease-in-out infinite alternate;
+  animation-delay: calc(var(--ck-i, 0) * 0.12s);
+}
+
+.ck-cake__wick {
+  display: block;
+  width: 2px;
+  height: 0.3rem;
+  flex-shrink: 0;
+  background: #2a1814;
+}
+
+.ck-cake__body {
+  display: block;
+  width: 0.32rem;
+  height: 1.85rem;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #fffef8 0%, #fce8ef 55%, #e8c8d8 100%);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes ck-flame {
+  from {
+    transform: scale(0.9) translateY(0);
+  }
+  to {
+    transform: scale(1.08) translateY(-2px);
+  }
+}
+
+.ck--cut .ck-cake__candles-bridge {
+  animation: ck-candles-lift 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+
+@keyframes ck-candles-lift {
+  to {
+    transform: translateX(-50%) translateY(calc(-96% - 10px));
+  }
+}
+
+/* Halves */
+.ck-cake__half {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition:
+    transform 1.5s cubic-bezier(0.22, 1, 0.32, 1),
+    filter 0.6s ease;
+}
+
+.ck-cake__half--left {
+  clip-path: inset(0 calc(100% - var(--ck-cut, 50%)) 0 0);
+  transform-origin: right bottom;
+  z-index: 3;
+}
+
+.ck-cake__half--right {
+  clip-path: inset(0 0 0 var(--ck-cut, 50%));
+  transform-origin: left bottom;
+  z-index: 3;
+  transition-delay: 0.08s;
+}
+
+.ck--cut .ck-cake__half--left {
+  transform: translate3d(-14%, 2%, 0) rotate(-4deg) rotateY(-6deg);
+  filter: drop-shadow(-8px 12px 16px rgba(0, 0, 0, 0.25));
+}
+
+.ck--cut .ck-cake__half--right {
+  transform: translate3d(14%, 2%, 0) rotate(4deg) rotateY(6deg);
+  filter: drop-shadow(8px 12px 16px rgba(0, 0, 0, 0.25));
+}
+
+/* Stack: tier 1 at bottom, tier 3 at top */
+.ck-cake__stack {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+}
+
+.ck-cake__tier {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 4px 4px 2px 2px;
+}
+
+.ck-cake__tier--1 {
+  width: 72%;
+  height: 4.25rem;
+  order: 1;
+  background: linear-gradient(
+    180deg,
+    #fce8ef 0%,
+    #f0c0d0 50%,
+    #e0a0b4 100%
+  );
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.35),
+    0 10px 22px rgba(0, 0, 0, 0.14);
+}
+
+.ck-cake__tier--2 {
+  width: 86%;
+  height: 4.5rem;
+  order: 2;
+  margin-top: -3px;
+  background: linear-gradient(180deg, #fff8fb, #fceef4 45%, #f4c0d0);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45);
+}
+
+.ck-cake__tier--3 {
+  width: 100%;
+  height: 5rem;
+  order: 3;
+  margin-top: -3px;
+  background: linear-gradient(180deg, #ffffff 0%, #fff6f9 40%, #fadce4 100%);
+  border-radius: 8px 8px 4px 4px;
+  box-shadow:
+    inset 0 5px 0 rgba(255, 255, 255, 0.6),
+    0 -2px 12px rgba(255, 255, 255, 0.08);
+}
+
+.ck-cake__gold-band {
+  position: absolute;
+  bottom: 0;
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #8a7020, #f0d78c, #d4af37, #f0d78c, #8a7020);
+}
+
+.ck-cake__drip {
+  position: absolute;
+  top: -0.55rem;
+  left: 10%;
+  right: 10%;
+  height: 1rem;
+  background:
+    radial-gradient(ellipse 0.5rem 0.65rem at 20% 100%, #fad8e4 99%, transparent),
+    radial-gradient(ellipse 0.45rem 0.6rem at 45% 100%, #f8d0dc 99%, transparent),
+    radial-gradient(ellipse 0.55rem 0.7rem at 70% 100%, #fce8ef 99%, transparent),
+    radial-gradient(ellipse 0.4rem 0.55rem at 88% 100%, #eeb8c8 99%, transparent);
+}
+
+.ck-cake__top-shine {
+  position: absolute;
+  top: 8%;
+  left: 15%;
+  width: 35%;
+  height: 18%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  filter: blur(2px);
+}
+
+.ck-cake__topper span {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #d47888);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.ck-cake__topper span:nth-child(1) {
+  top: 28%;
+  left: 24%;
+}
+.ck-cake__topper span:nth-child(2) {
+  top: 22%;
+  left: 48%;
+  background: radial-gradient(circle at 30% 30%, #fff, #d4af37);
+}
+.ck-cake__topper span:nth-child(3) {
+  top: 30%;
+  right: 22%;
+}
+
+.ck-cake__pearls {
+  position: absolute;
+  inset: 18% 12% 30%;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.65) 0.1rem, transparent 0.11rem);
+  background-size: 1rem 0.85rem;
+  opacity: 0.45;
+}
+
+.ck-cake__side-shade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 18%;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.06));
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ck-cake__slice-face {
+  position: absolute;
+  top: 5%;
+  bottom: 0;
+  right: -2px;
+  width: 6px;
+  background: linear-gradient(180deg, #fff5f0, #e8d0c8 40%, #d4a090 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.35s;
+  z-index: 5;
+  border-radius: 1px;
+}
+
+.ck-cake__slice-face--right {
+  right: auto;
+  left: -2px;
+}
+
+.ck--cut .ck-cake__slice-face {
+  opacity: 1;
+}
+
+.ck-cake__cream-fill {
+  position: absolute;
+  top: 12%;
+  bottom: 8%;
+  right: 0;
+  width: 3px;
+  background: rgba(255, 250, 248, 0.5);
+  opacity: 0;
+  transition: opacity 0.4s ease 0.2s;
+}
+
+.ck--cut .ck-cake__cream-fill {
+  opacity: 0.7;
+}
+
+.ck-cake__half--right .ck-cake__cream-fill {
+  right: auto;
+  left: 0;
+}
+
+.ck-cake__glow {
+  position: absolute;
+  top: -15%;
+  left: 50%;
+  width: 90%;
+  height: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center bottom,
+    rgba(255, 190, 100, 0.35),
+    transparent 72%
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: ck-candle-glow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes ck-candle-glow {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Cutting FX — full swipe groove */
+.ck-cake__cut-groove {
+  position: absolute;
+  top: 6%;
+  bottom: 8%;
+  left: var(--ck-cut-min, 45%);
+  width: var(--ck-cut-width, 2%);
+  min-width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 8%,
+    rgba(255, 255, 255, 0.95) 18%,
+    rgba(255, 255, 255, 0.95) 82%,
+    rgba(255, 255, 255, 0.35) 92%,
+    transparent 100%
+  );
+  box-shadow:
+    inset 0 0 8px rgba(255, 255, 255, 0.5),
+    0 0 20px rgba(255, 240, 220, 0.45);
+  z-index: 11;
+  pointer-events: none;
+  transition: width 0.12s ease, left 0.12s ease;
+}
+
+.ck--dragging .ck-cake__cut-groove {
+  animation: ck-groove-pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes ck-groove-pulse {
+  from {
+    opacity: 0.85;
+    filter: brightness(1);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+}
+
+.ck--cut .ck-cake__cut-groove {
+  opacity: 0;
+  transition: opacity 0.35s ease 0.2s;
+}
+
+.ck-cake__cut-shine {
+  position: absolute;
+  top: 8%;
+  bottom: 10%;
+  left: var(--ck-cut-min, 45%);
+  width: var(--ck-cut-width, 2%);
+  min-width: 3px;
+  background: rgba(255, 255, 255, 0.45);
+  filter: blur(5px);
+  z-index: 10;
+  pointer-events: none;
+  opacity: calc(var(--ck-cut-progress, 0) * 0.75);
+}
+
+.ck-cake__cream-smear {
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  left: calc(var(--ck-cut-min, 45%) - 2px);
+  width: calc(var(--ck-cut-width, 2%) + 4px);
+  min-width: 6px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 252, 254, 0.75) 15%,
+    rgba(255, 245, 248, 0.92) 50%,
+    rgba(255, 252, 254, 0.75) 85%,
+    transparent
+  );
+  filter: blur(4px);
+  z-index: 9;
+  pointer-events: none;
+  opacity: calc(0.4 + var(--ck-cut-progress, 0) * 0.6);
+}
+
+.ck-crumbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 11;
+}
+
+.ck-crumbs__bit {
+  position: absolute;
+  border-radius: 40% 60% 50% 50%;
+  background: linear-gradient(135deg, #fff8fa, #f0c8d8);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  animation: ck-crumb-fall 0.9s ease-out forwards;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes ck-crumb-fall {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 28px)) scale(0.3) rotate(120deg);
+  }
+}
+
+.ck-cake__tap-hint {
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240, 215, 140, 0.5);
+  animation: ck-hint-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ck-hint-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+/* Slice progress (mobile-friendly feedback) */
+.ck-slice-meter {
+  position: absolute;
+  bottom: 0.35rem;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 15;
+}
+
+.ck-slice-meter--on {
+  opacity: 1;
+}
+
+.ck-slice-meter__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--ck-gold), var(--ck-rose));
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.1s linear;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.ck-knife {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(var(--ck-knife-angle, 90deg));
+  z-index: 16;
+  pointer-events: none;
+  will-change: transform, left, top;
+  transition: transform 0.06s ease-out;
+}
+
+.ck--dragging .ck-knife {
+  transition: none;
+}
+
+.ck-knife__svg {
+  width: clamp(2.85rem, 12vw, 3.75rem);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* —— Finale card —— */
+.ck-finale {
+  width: 100%;
+  max-width: 24rem;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.8s ease 0.5s;
+  pointer-events: none;
+}
+
+.ck-finale--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ck-finale__card {
+  padding: 1.2rem 1.4rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  backdrop-filter: blur(10px);
+}
+
+.ck-finale__line {
+  margin: 0;
+  font-family: var(--font-libre), Georgia, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: rgba(250, 243, 235, 0.8);
+}
+
+.ck-finale__line + .ck-finale__line {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+/* —— Footer —— */
+.ck__footer {
+  position: relative;
+  z-index: 12;
+  padding-top: 1.5rem;
+  transition: opacity 0.5s ease;
+}
+
+.ck__footer--dim {
+  opacity: 0.35;
+}
+
+.ck__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.ck__nav-btn {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.2rem;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: transform 0.2s ease;
+}
+
+.ck__nav-btn:hover {
+  transform: translateY(-2px);
+}
+
+.ck__nav-btn--ghost {
+  color: var(--ck-cream);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+.ck__nav-btn--solid {
+  color: var(--ck-ink);
+  background: linear-gradient(135deg, var(--ck-gold-light), var(--ck-gold));
+  font-weight: 600;
+}
+
+.ck__nav-count {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  color: rgba(250, 243, 235, 0.35);
+}
+
+@media (max-width: 560px) {
+  .ck__main {
+    padding-top: 5.5rem;
+  }
+
+  .ck-banner {
+    top: 3rem;
+  }
+
+  .ck-cake-zone {
+    min-height: min(58vh, 24rem);
+    padding-bottom: 3rem;
+  }
+
+  .ck-cake {
+    height: 200px;
+  }
+
+  .ck-cake__candles-bridge {
+    width: 84%;
+  }
+
+  .ck-knife__svg {
+    width: 3.25rem;
+  }
+
+  .ck-cake__tap-hint {
+    font-size: 0.62rem;
+    bottom: 2.5rem;
+  }
+
+  .ck--cut .ck-cake__half--left {
+    transform: translate3d(-10%, 1%, 0) rotate(-3deg);
+  }
+
+  .ck--cut .ck-cake__half--right {
+    transform: translate3d(10%, 1%, 0) rotate(3deg);
+  }
+}
+
+@media (pointer: coarse) {
+  .ck-cake-zone {
+    min-height: min(60vh, 26rem);
+  }
+
+  .ck-knife__svg {
+    width: 3.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-balloon,
+  .ck-balloon__orb,
+  .ck-petals__bit,
+  .ck-sparkles-field__dot,
+  .ck-lights__bulb,
+  .ck-celebration__firework,
+  .ck-celebration__confetti-bit,
+  .ck-celebration__particle,
+  .ck-cake__flame,
+  .ck-crumbs__bit,
+  .ck-cake__tap-hint,
+  .ck-ambient__glow--warm,
+  .ck-table__spotlight {
+    animation: none;
+  }
+
+  .ck-cake__half,
+  .ck-knife,
+  .ck--dragging .ck-cake__cut-groove {
+    transition-duration: 0.25s;
+    animation: none;
+  }
+
+  .ck-celebration__name {
+    animation: none;
+  }
+}

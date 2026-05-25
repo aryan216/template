@@ -1,0 +1,3 @@
+# Add your birthday photos here
+# Then set paths in src/lib/bollywood-photos.ts
+# Example: src: "/photos/cutout-1.jpg"

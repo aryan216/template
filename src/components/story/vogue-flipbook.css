@@ -1,0 +1,804 @@
+/* Interactive Vogue flipbook — page-flip library + page styles */
+
+.vogue-book-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 26rem;
+  margin: 0 auto;
+}
+
+.vogue-book-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mag-muted, #6b635c);
+  text-align: center;
+}
+
+.vogue-book-hint__corner {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-top: 2px solid var(--mag-gold, #9a7b52);
+  border-right: 2px solid var(--mag-gold, #9a7b52);
+  border-radius: 0 3px 0 0;
+  transform: rotate(8deg);
+  opacity: 0.85;
+  animation: mag-corner-wiggle 2.2s ease-in-out infinite;
+}
+
+@keyframes mag-corner-wiggle {
+  0%, 100% { transform: rotate(8deg) scale(1); }
+  50% { transform: rotate(2deg) scale(1.08); }
+}
+
+.vogue-book-stage {
+  position: relative;
+  width: 100%;
+  min-height: clamp(24rem, 72vw, 34rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.vogue-book-stage--ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vogue-book-stage::before {
+  content: "";
+  position: absolute;
+  inset: 8% 5% 4%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.22), transparent 62%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.vogue-book {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+}
+
+/* Single page shell */
+.mag-book-page {
+  background: #faf8f5;
+  border: 1px solid rgba(20, 18, 16, 0.06);
+  overflow: hidden;
+}
+
+.mag-book-page--hard {
+  background: #f0ebe4;
+}
+
+.mag-book-page__inner {
+  height: 100%;
+  padding: 0.85rem 0.85rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+.mag-book-page__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.48rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mag-gold, #9a7b52);
+}
+
+.mag-book-page__title {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--mag-ink, #141210);
+}
+
+.mag-book-page__body {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: rgba(20, 18, 16, 0.82);
+}
+
+.mag-book-page__body--letter {
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+
+.mag-book-page__list {
+  margin: 0.5rem 0 0;
+  padding: 0 0 0 1rem;
+  font-size: 0.7rem;
+  line-height: 1.65;
+  color: rgba(20, 18, 16, 0.85);
+}
+
+.mag-book-page__folio {
+  margin: auto 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(20, 18, 16, 0.08);
+  font-size: 0.48rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mag-muted, #6b635c);
+}
+
+.mag-book-page__folio-no {
+  font-weight: 600;
+  color: var(--mag-ink, #141210);
+}
+
+.mag-book-page__folio-brand {
+  opacity: 0.75;
+}
+
+.mag-book-page__deck {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.7rem;
+  font-style: italic;
+  line-height: 1.35;
+  color: rgba(20, 18, 16, 0.72);
+}
+
+.mag-book-page__body--lead::first-letter {
+  float: left;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.75rem;
+  line-height: 0.85;
+  padding: 0.05rem 0.35rem 0 0;
+  color: var(--mag-gold, #9a7b52);
+}
+
+.mag-book-page__body--extra {
+  margin-top: 0.3rem;
+  font-size: 0.62rem;
+  line-height: 1.45;
+  color: rgba(20, 18, 16, 0.72);
+}
+
+.mag-book-page__byline {
+  margin: 0.25rem 0 0;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mag-muted, #6b635c);
+}
+
+.mag-book-page__contents-intro {
+  margin: 0 0 0.55rem;
+  font-size: 0.64rem;
+  line-height: 1.5;
+  color: rgba(20, 18, 16, 0.7);
+}
+
+.mag-book-page__toc {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex: 1;
+}
+
+.mag-book-page__toc li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 0.42rem;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.mag-book-page__toc-label {
+  flex-shrink: 0;
+  max-width: 72%;
+}
+
+.mag-book-page__toc-dots {
+  flex: 1;
+  min-width: 0.5rem;
+  border-bottom: 1px dotted rgba(20, 18, 16, 0.25);
+  margin-bottom: 0.15rem;
+}
+
+.mag-book-page__toc-page {
+  flex-shrink: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.mag-book-editorial-photo {
+  position: relative;
+  margin: 0.3rem 0 0.25rem;
+  flex: 0 0 auto;
+  width: 100%;
+  --mag-photo-boost: 3cm;
+  --mag-photo-h: clamp(6.25rem, 30vw, 8rem);
+  /* rem-only — % fails inside page-flip and collapses the frame */
+  --mag-photo-size: min(calc(var(--mag-photo-h) + var(--mag-photo-boost)), 11.5rem);
+}
+
+.mag-book-editorial-photo .mag-photo-figure {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  margin: 0;
+}
+
+.mag-book-editorial-photo .mag-photo-figure--overlay {
+  position: relative;
+  min-height: var(--mag-photo-size);
+}
+
+.mag-book-editorial-photo .mag-photo-figure__frame {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  height: var(--mag-photo-size);
+  min-height: var(--mag-photo-size);
+  max-height: var(--mag-photo-size);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--mag-paper, #ebe4d8);
+  border: 1px solid rgba(20, 18, 16, 0.08);
+  isolation: isolate;
+}
+
+.mag-book-editorial-photo .mag-photo-slot__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+  z-index: 0;
+}
+
+.mag-book-editorial-photo .mag-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.mag-book-sidebar {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid rgba(20, 18, 16, 0.1);
+}
+
+.mag-book-sidebar__rule {
+  margin: 0 0 0.4rem;
+  height: 2px;
+  width: 2rem;
+  background: var(--mag-gold, #9a7b52);
+}
+
+.mag-book-sidebar__item {
+  margin: 0 0 0.35rem;
+  font-size: 0.58rem;
+  line-height: 1.45;
+  color: rgba(20, 18, 16, 0.78);
+}
+
+.mag-book-sidebar__item strong {
+  display: block;
+  font-size: 0.48rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mag-gold, #9a7b52);
+  margin-bottom: 0.1rem;
+}
+
+/* Photo figure + captions */
+.mag-photo-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mag-photo-figure__frame {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Caption band — inside the frame so it cannot overlap body copy */
+.mag-photo-figure__overlay-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 1.75rem 0.4rem 0.35rem;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(10, 8, 6, 0.55) 40%,
+    rgba(10, 8, 6, 0.88) 100%
+  );
+  color: #fff;
+  text-align: left;
+  pointer-events: none;
+}
+
+.mag-book-editorial-photo .mag-photo-figure--below .mag-photo-figure__frame {
+  --mag-photo-h: clamp(5.5rem, 27vw, 7.25rem);
+  --mag-photo-size: min(calc(var(--mag-photo-h) + var(--mag-photo-boost)), 10.5rem);
+  height: var(--mag-photo-size);
+  min-height: var(--mag-photo-size);
+  max-height: var(--mag-photo-size);
+}
+
+.mag-photo-figure--below .mag-photo-figure__caption {
+  position: static;
+  flex-shrink: 0;
+  padding: 0.25rem 0 0;
+  background: none;
+  color: var(--mag-ink, #141210);
+}
+
+.mag-photo-placeholder__path {
+  display: block;
+  margin: 0.15rem 0.5rem 0;
+  padding: 0.3rem 0.45rem;
+  max-width: 92%;
+  font-family: ui-monospace, "Cascadia Mono", monospace;
+  font-size: 0.5rem;
+  line-height: 1.35;
+  word-break: break-all;
+  color: var(--mag-ink, #141210);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(154, 123, 82, 0.35);
+  border-radius: 2px;
+}
+
+.mag-photo-figure__kicker {
+  display: block;
+  font-size: 0.42rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 0.12rem;
+}
+
+.mag-photo-figure__line {
+  display: block;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.58rem;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.mag-photo-figure__credit {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+.mag-photo-figure__caption--muted .mag-photo-figure__line {
+  color: rgba(20, 18, 16, 0.75);
+}
+
+.mag-book-cover__photo .mag-photo-figure {
+  height: 100%;
+}
+
+.mag-book-cover__photo .mag-photo-figure__frame {
+  position: absolute;
+  inset: 0;
+}
+
+.mag-book-page--quote .mag-book-quote__folio {
+  margin: 0.75rem 0 0;
+  font-size: 0.48rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0.45;
+}
+
+.mag-book-page--quote .mag-book-page__folio {
+  border-top-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mag-book-page--quote .mag-book-page__folio-no {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mag-book-page__sign {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-caveat), cursive;
+  font-size: 1rem;
+  color: var(--mag-rose, #b07d6f);
+}
+
+.mag-book-page__stickers {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: auto;
+  font-size: 1.25rem;
+}
+
+/* Cover spread (page 1) */
+.mag-book-page--cover .mag-book-page__inner {
+  padding: 0;
+}
+
+.mag-book-cover {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  background: #8e8984;
+  color: #fff;
+}
+
+.mag-book-cover__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
+    linear-gradient(165deg, #9a9590 0%, #7a7570 40%, #6e6a66 100%);
+}
+
+.mag-book-cover__edition {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.5rem;
+  z-index: 5;
+  margin: 0;
+  font-size: 0.38rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mag-book-cover .vogue-cover__masthead-text {
+  top: 1.5rem;
+  font-size: clamp(2.2rem, 11vw, 3rem);
+  z-index: 6;
+}
+
+.mag-book-cover__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.mag-book-cover__photo .mag-photo-slot__img {
+  object-fit: cover;
+  object-position: center 12%;
+}
+
+.mag-book-cover__photo .mag-photo-figure__caption {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.mag-book-cover__feature {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.55rem;
+  left: 0.5rem;
+  z-index: 5;
+  text-align: right;
+}
+
+.mag-book-cover__headline {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+.mag-book-cover__sub {
+  margin: 0;
+  font-size: 0.42rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* Back cover */
+.mag-book-page--back .mag-book-page__inner {
+  padding: 0;
+}
+
+.mag-book-back {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  background: linear-gradient(160deg, #1a1816 0%, #2a2420 100%);
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.mag-book-back__masthead {
+  margin: 0;
+  font-family: var(--font-bodoni), "Didot", Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.mag-book-back__wish {
+  margin: 0;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.mag-book-back__line {
+  margin: 0;
+  font-size: 0.48rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+/* Quote page */
+.mag-book-page--quote .mag-book-page__inner {
+  justify-content: center;
+  background: var(--mag-ink, #141210);
+  color: #fff;
+}
+
+.mag-book-quote {
+  margin: 0;
+  text-align: center;
+}
+
+.mag-book-quote__mark {
+  display: block;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 2.5rem;
+  line-height: 0.6;
+  opacity: 0.35;
+}
+
+.mag-book-quote p {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.mag-book-quote cite {
+  font-size: 0.55rem;
+  font-style: normal;
+  opacity: 0.7;
+}
+
+/* Rail ticket inset */
+.mag-book-rail {
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.6rem;
+  background: linear-gradient(180deg, #eef4fb, #f8fafc);
+  border: 1px solid #9cb4d4;
+  border-top: 2px solid #1a4480;
+  font-family: var(--font-tiro), sans-serif;
+}
+
+.mag-book-rail__title {
+  margin: 0 0 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1a4480;
+}
+
+.mag-book-rail__train,
+.mag-book-rail__route,
+.mag-book-rail__meta,
+.mag-book-rail__date {
+  margin: 0 0 0.15rem;
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+
+/* Photo + copy pages — keep everything inside the spread */
+.mag-book-page--mirror .mag-book-page__inner,
+.mag-book-page--portrait .mag-book-page__inner,
+.mag-book-page--travel .mag-book-page__inner,
+.mag-book-page--spread .mag-book-page__inner {
+  overflow: hidden;
+}
+
+.mag-book-page--mirror .mag-book-page__body,
+.mag-book-page--portrait .mag-book-page__body,
+.mag-book-page--travel .mag-book-page__body,
+.mag-book-page--spread .mag-book-page__body {
+  font-size: 0.68rem;
+  line-height: 1.48;
+}
+
+.mag-book-page--travel .mag-book-editorial-photo {
+  --mag-photo-h: clamp(5.5rem, 26vw, 7rem);
+  --mag-photo-size: min(calc(var(--mag-photo-h) + var(--mag-photo-boost)), 10rem);
+}
+
+.mag-book-page--travel .mag-book-editorial-photo .mag-photo-figure__frame {
+  height: var(--mag-photo-size);
+  min-height: var(--mag-photo-size);
+  max-height: var(--mag-photo-size);
+}
+
+.mag-book-page--travel .mag-book-rail {
+  margin-top: 0.4rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.mag-book-page--travel .mag-book-rail__title {
+  font-size: 0.75rem;
+}
+
+.mag-book-page--mirror .mag-book-page__stickers {
+  margin-top: 0.2rem;
+  font-size: 1rem;
+}
+
+.mag-book-page--spread .mag-book-sidebar {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+}
+
+.mag-book-page--spread .mag-book-sidebar__item {
+  margin-bottom: 0.25rem;
+  font-size: 0.54rem;
+}
+
+.mag-book-page--letter .mag-book-page__body,
+.mag-book-page--letter .mag-book-page__body--extra {
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
+
+.mag-book-page--letter .mag-book-page__inner {
+  overflow: hidden;
+}
+
+.mag-book-letter {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.15rem;
+}
+
+.mag-book-copy--compact .mag-book-page__title {
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+}
+
+.mag-book-copy--compact .mag-book-page__body--extra {
+  margin-top: 0.25rem;
+  font-size: 0.6rem;
+  line-height: 1.45;
+}
+
+/* Editor's letter — fixed tall frame (global min() cap was clipping height) */
+.mag-book-page--letter .mag-book-editorial-photo {
+  --mag-photo-boost: 0;
+  --mag-photo-size: 12.5rem;
+  margin: 0.25rem 0 0.15rem;
+  flex-shrink: 0;
+}
+
+.mag-book-page--letter .mag-book-editorial-photo .mag-photo-figure__frame,
+.mag-book-page--letter
+  .mag-book-editorial-photo
+  .mag-photo-figure--below
+  .mag-photo-figure__frame {
+  height: 12.5rem;
+  min-height: 12.5rem;
+  max-height: 12.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ebe6df;
+}
+
+.mag-book-page--letter .mag-book-editorial-photo .mag-photo-slot__img {
+  object-fit: contain;
+  object-position: center center;
+}
+
+.mag-book-page--letter .mag-book-page__sign {
+  margin: 0.1rem 0 0;
+  flex-shrink: 0;
+}
+
+.mag-book-page--letter .mag-book-page__folio {
+  margin-top: auto;
+}
+
+/* Controls */
+.vogue-book-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.vogue-book-controls__btn {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(20, 18, 16, 0.2);
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--mag-ink, #141210);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.vogue-book-controls__btn:hover:not(:disabled) {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.vogue-book-controls__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.vogue-book-controls__btn--next {
+  background: var(--mag-ink, #141210);
+  color: #fff;
+  border-color: var(--mag-ink, #141210);
+}
+
+.vogue-book-controls__count {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  min-width: 4.5rem;
+  text-align: center;
+  color: var(--mag-muted, #6b635c);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vogue-book-hint__corner {
+    animation: none;
+  }
+
+  .vogue-book-stage {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
